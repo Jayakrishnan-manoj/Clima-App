@@ -1,5 +1,11 @@
+import 'package:clima_app/services/weather.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+import 'package:clima_app/screens/location_screen.dart';
+import 'package:clima_app/services/location.dart';
+import 'package:clima_app/services/networking.dart';
 
 class LoadingScreen extends StatefulWidget {
   @override
@@ -7,41 +13,52 @@ class LoadingScreen extends StatefulWidget {
 }
 
 class _LoadingScreenState extends State<LoadingScreen> {
-  void getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
+  void getLocationData() async {
+    WeatherModel weathermodel = WeatherModel();
+    var weatherData = await weathermodel.getLocationWeather();
+    // ignore: use_build_context_synchronously
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) {
+          return LocationScreen(
+            locationWeather: weatherData,
+          );
+        },
+      ),
+    );
+  }
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions.');
-    }
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
+  @override
+  void initState() {
+    getLocationData();
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            getLocation();
-          },
-          child: Text('Get Location'),
-        ),
-      ),
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: const [
+          SpinKitRotatingCircle(
+            color: Colors.white,
+            size: 100,
+          ),
+          SizedBox(
+            height: 18,
+          ),
+          Text(
+            "Please Wait",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+            ),
+          )
+        ],
+      )),
     );
   }
 }
