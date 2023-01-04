@@ -112,7 +112,8 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(right: 15.0,bottom: 20.0),
+                  padding: EdgeInsets.only(right: 15.0,bottom: 20.0)
+                  ,
                   child: Text(
                     '$weatherMessage in $cityName',
                     textAlign: TextAlign.right,
