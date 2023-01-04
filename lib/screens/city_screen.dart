@@ -45,13 +45,20 @@ class _CityScreenState extends State<CityScreen> {
                   decoration: kTextFieldDecoration,
                 ),
               ),
-              TextButton(
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blueGrey,
+                  elevation: 10,
+                ),
                 onPressed: () {
-                  Navigator.pop(context,_textEditingController.text);
+                  Navigator.pop(context, _textEditingController.text);
                 },
                 child: Text(
                   'Get Weather',
-                  style: kButtonTextStyle.copyWith(color: Colors.white),
+                  style: kButtonTextStyle.copyWith(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
                 ),
               ),
             ],
